@@ -124,8 +124,61 @@ export const getMyProfile = async (req, res) => {
   try {
     const id = req.params.id;
     const user = await User.findById(id).select("-password");
-    return res.status(200).json({user});
+    return res.status(200).json({user, success: true});
   } catch (error) {
     console.log(error);
   }
 }
+
+export const editProfile = async (req, res) => {
+  try {
+    const userId = req.id; // Assuming userId comes from authentication middleware (e.g., JWT)
+    const { name, email, age, gender, address, city, country } = req.body;
+
+    // Find the user by ID, excluding password in the result
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+        success: false,
+      });
+    }
+
+    // Check if the new email is already in use by another user, but only if email is provided
+    if (email && email !== user.email) {
+      const emailExists = await User.findOne({ email });
+      if (emailExists) {
+        return res.status(400).json({
+          message: "Email already in use by another user.",
+          success: false,
+        });
+      }
+    }
+
+    // Update user fields if provided, only modify if a value is passed
+    if (name && name.trim()) user.name = name.trim(); // Trim to avoid saving whitespace
+    if (email && email.trim()) user.email = email.trim();
+    if (age !== undefined) user.age = age; // Allow for age to be updated to 0 if needed
+    if (gender && gender.trim()) user.gender = gender.trim();
+    if (address && address.trim()) user.address = address.trim();
+    if (city && city.trim()) user.city = city.trim();
+    if (country && country.trim()) user.country = country.trim();
+
+    // Save the updated user information
+    await user.save();
+
+    return res.status(200).json({
+      message: "Profile updated successfully.",
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "An error occurred while updating the profile.",
+      success: false,
+    });
+  }
+};
+
+
