@@ -133,3 +133,42 @@ export const getUserPolicy = async (req, res) => {
     });
   }
 };
+
+export const deletePolicy = async (req, res) => {
+  try {
+    const policyId = req.params.id; // Get policy ID from URL parameters
+    const userId = req.id; // Get the authenticated user's ID (assuming it's set in req.id)
+
+    // Find the policy by ID
+    const policy = await Policy.findById(policyId);
+    if (!policy) {
+      return res
+        .status(404)
+        .json({ message: "Policy not found", success: false });
+    }
+
+    // Check if the logged-in user is the owner of the policy
+    if (policy.user.toString() !== userId) {
+      return res.status(403).json({ message: "Unauthorized", success: false });
+    }
+
+    // Delete the policy
+    await Policy.findByIdAndDelete(policyId);
+
+    // Remove the policy ID from the user's policies array
+    let user = await User.findById(userId);
+    user.policies = user.policies.filter((id) => id.toString() !== policyId);
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Policy deleted",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
