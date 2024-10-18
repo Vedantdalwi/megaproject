@@ -39,7 +39,7 @@ const policySchema = new mongoose.Schema(
       ref: "User", // Reference to the User who owns the policy
       required: true,
     },
-    
+
     // Installment-related fields
     installmentDuration: {
       type: String,
@@ -49,6 +49,10 @@ const policySchema = new mongoose.Schema(
     installmentAmount: {
       type: Number,
       required: true, // The amount due for each installment
+    },
+    nominees: {
+      type: [String], // Array of nominee names
+      required: false, // Nominees may not always be required (depends on the policy type)
     },
   },
   { timestamps: true }

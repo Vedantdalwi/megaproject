@@ -2,12 +2,18 @@ import "./App.css";
 import Signup from './components/Signup';
 import Homepage from "./components/Homepage";
 import Login from "./components/Login";
+import Policy from "./components/Policy";
+import Addpolicy from "./components/Addpolicy";
+import EditPolicy from "./components/Editpolicy";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   { path: "/", element: <Homepage /> },
   { path: "/signup", element: <Signup /> },
   { path: "/login", element: <Login /> },
+  { path: "/policy", element: <Policy /> },
+  { path: "/addpolicy", element: <Addpolicy /> },
+  { path: "/editpolicy", element: <EditPolicy /> },
 ]);
 
 function App() {

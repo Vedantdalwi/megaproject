@@ -13,6 +13,7 @@ export const addNewPolicy = async (req, res) => {
       endDate,
       installmentDuration,
       installmentAmount,
+      nominees, // Add nominees to destructuring
     } = req.body;
 
     // Get user ID from the request, assuming it's attached from middleware (e.g., after authentication)
@@ -74,6 +75,14 @@ export const addNewPolicy = async (req, res) => {
       });
     }
 
+    // Validate nominees (optional)
+    if (nominees && !Array.isArray(nominees)) {
+      return res.status(400).json({
+        message: "Nominees must be an array of names",
+        success: false,
+      });
+    }
+
     // Create the new policy
     const policy = await Policy.create({
       policyNumber,
@@ -85,6 +94,7 @@ export const addNewPolicy = async (req, res) => {
       installmentDuration,
       installmentAmount,
       user: userId,
+      nominees: nominees || [], // Set nominees to an empty array if not provided
     });
 
     // Find the user and attach the policy reference to their profile
@@ -111,6 +121,7 @@ export const addNewPolicy = async (req, res) => {
     });
   }
 };
+
 
 export const getUserPolicy = async (req, res) => {
   try {
