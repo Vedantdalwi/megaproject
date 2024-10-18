@@ -11,20 +11,32 @@ const PolicyTable = () => {
     navigate('/addpolicy');
   };
 
-  const handleEditPolicy = (policyNumber) => {
-    alert(`Edit policy ${policyNumber} clicked`);
+  const handleEditPolicy = (policyId) => {
+    alert(`Edit policy ${policyId} clicked`);
   };
 
-  const handleDeletePolicy = (policyNumber) => {
-    alert(`Delete policy ${policyNumber} clicked`);
+  const handleDeletePolicy = async (policyId) => {
+    try {
+      const response = await axios.delete(`http://localhost:8080/api/v1/policy/deletePolicy/${policyId}`, {
+        withCredentials: true,
+      }); // Call DELETE endpoint
+
+      if (response.data.success) {
+        setPolicies(policies.filter((policy) => policy._id !== policyId)); // Update state
+        alert(`Policy ${policyId} deleted successfully!`); // Optional: Use toast for notifications
+      }
+    } catch (error) {
+      console.error("Error deleting policy:", error);
+      alert(error.response?.data?.message || "Failed to delete policy. Please try again."); // Show error message if available
+    }
   };
 
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/policy/policies',{
-            withCredentials:true
-          }); // Adjust API endpoint as necessary
+        const response = await axios.get('http://localhost:8080/api/v1/policy/policies', {
+          withCredentials: true,
+        }); // Adjust API endpoint as necessary
         setPolicies(response.data.policies); // Assuming the response is in the format { policies: [...] }
       } catch (error) {
         console.error("Error fetching policies:", error);
@@ -76,7 +88,7 @@ const PolicyTable = () => {
               </tr>
             ) : (
               policies.map((policy) => (
-                <tr key={policy.policyNumber} className="border-b border-gray-200 hover:bg-gray-100">
+                <tr key={policy._id} className="border-b border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-left">{policy.policyNumber}</td>
                   <td className="py-3 px-6 text-left">{policy.policyName}</td>
                   <td className="py-3 px-6 text-left">{policy.policyType}</td>
@@ -89,7 +101,7 @@ const PolicyTable = () => {
                   <td className="py-3 px-6 text-center">
                     <button 
                       className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-                      onClick={() => handleEditPolicy(policy.policyNumber)}
+                      onClick={() => handleEditPolicy(policy._id)} // Change to use policy._id
                     >
                       Edit
                     </button>
@@ -97,7 +109,7 @@ const PolicyTable = () => {
                   <td className="py-3 px-6 text-center">
                     <button 
                       className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                      onClick={() => handleDeletePolicy(policy.policyNumber)}
+                      onClick={() => handleDeletePolicy(policy._id)} // Change to use policy._id
                     >
                       Delete
                     </button>
