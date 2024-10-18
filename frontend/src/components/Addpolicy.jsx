@@ -40,10 +40,18 @@ const AddPolicy = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-
+    const updatedFormData = {
+        ...formData,
+        installmentAmount: Number(formData.installmentAmount), // Convert string to number
+      };
+      console.log('Form data being submitted:', updatedFormData);
     try {
       // Make the POST request to the backend API
-      const response = await axios.post('http://localhost:8080/api/v1/policy/addpolicy', formData);
+      const response = await axios.post('http://localhost:8080/api/v1/policy/addpolicy', formData, {headers: {
+        "Content-Type": "application/json"
+    },
+    withCredentials: true
+});
   
       // If successful, log the response
       console.log('Policy added successfully:', response.data);
