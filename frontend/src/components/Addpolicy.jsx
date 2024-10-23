@@ -77,9 +77,9 @@ const AddPolicy = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Add New Policy</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="container mx-auto p-6 mt-2">
+      <h1 className="text-2xl font-bold mb-4">Add New Policy</h1>
+      <form onSubmit={handleSubmit} className="space-y-4 mt-2">
         {/* Policy Number */}
         <div>
           <label className="block text-gray-700">Policy Number:</label>
