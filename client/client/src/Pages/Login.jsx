@@ -3,10 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
-
 const Login = () => {
   const [user, setUser] = useState({
-    email: '', // Update state to use 'email' instead of 'username'
+    email: '',
     password: '',
   });
   
@@ -20,55 +19,64 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-       
       });
+      // Navigate to the dashboard after successful login
       navigate('/dashboard');
       console.log(res);
       
     } catch (error) {
+      // Show error toast if something went wrong
       toast.error(error.response?.data?.message || 'Something went wrong');
       console.log(error);
     }
+
+    // Reset the user state after submission
     setUser({
-      email: '', // Reset email field after submission
+      email: '',
       password: '',
     });
   };
 
   return (
-    <div className="min-w-96 mx-auto">
-      <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100">
-        <h1 className="text-3xl font-bold text-center">Login</h1>
-        <form onSubmit={onSubmitHandler} action="">
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Email</span>
-            </label>
+    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+        <h1 className="text-3xl font-semibold text-center text-gray-700 mb-6">Login</h1>
+        
+        <form onSubmit={onSubmitHandler}>
+          {/* Email Input */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2">Email</label>
             <input
               value={user.email}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
-              className="w-full input input-bordered h-10"
-              type="email" // Change input type to 'email'
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="email"
               placeholder="Email"
+              required
             />
           </div>
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Password</span>
-            </label>
+
+          {/* Password Input */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-semibold mb-2">Password</label>
             <input
               value={user.password}
               onChange={(e) => setUser({ ...user, password: e.target.value })}
-              className="w-full input input-bordered h-10"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="password"
               placeholder="Password"
+              required
             />
           </div>
-          <p className="text-center my-2">
-            Don't have an account? <Link to="/signup"> signup </Link>
+
+          {/* Sign Up Link */}
+          <p className="text-center text-sm text-gray-600 mb-4">
+            Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Signup</Link>
           </p>
+
+          {/* Submit Button */}
           <div>
-            <button type="submit" className="btn btn-block btn-sm mt-2 border border-slate-700">
+            <button type="submit" className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none">
               Login
             </button>
           </div>

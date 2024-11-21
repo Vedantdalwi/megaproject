@@ -5,20 +5,20 @@ import toast from 'react-hot-toast';
 
 const Signup = () => {
   const [user, setUser] = useState({
-    name: '', // Change to 'name'
-    email: '', // Add 'email'
+    name: '',
+    email: '',
     password: '',
     confirmPassword: '',
-    age: '', // Add 'age'
-    gender: '', // Keep gender
-    address: '', // Add 'address'
-    city: '', // Add 'city'
-    country: '', // Add 'country'
+    age: '',
+    gender: '',
+    address: '',
+    city: '',
+    country: '',
   });
 
   const navigate = useNavigate();
 
-  const handleCheckbox = (gender) => {
+  const handleRadioChange = (gender) => {
     setUser({ ...user, gender });
   };
 
@@ -39,10 +39,12 @@ const Signup = () => {
       toast.error(error.response?.data?.message || 'Something went wrong');
       console.log(error);
     }
+
     setUser({
       name: '',
       email: '',
       password: '',
+      confirmPassword: '',
       age: '',
       gender: '',
       address: '',
@@ -52,138 +54,142 @@ const Signup = () => {
   };
 
   return (
-    <div className='h-full'>
-<div className="min-w-96 mx-auto mb-2">
-      <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100">
-        <h1 className="text-3xl font-bold text-center">Signup</h1>
-        <form onSubmit={onSubmitHandler} action="">
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Full Name</span>
-            </label>
+    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+        <h1 className="text-3xl font-semibold text-center text-gray-700 mb-6">Signup</h1>
+        
+        <form onSubmit={onSubmitHandler}>
+          {/* Full Name */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2">Full Name</label>
             <input
               value={user.name}
               onChange={(e) => setUser({ ...user, name: e.target.value })}
-              className="w-full input input-bordered h-10"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
               placeholder="Full Name"
+              required
             />
           </div>
 
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Email</span>
-            </label>
+          {/* Email */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2">Email</label>
             <input
               value={user.email}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
-              className="w-full input input-bordered h-10"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="email"
               placeholder="Email"
+              required
             />
           </div>
 
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Password</span>
-            </label>
+          {/* Password */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2">Password</label>
             <input
               value={user.password}
               onChange={(e) => setUser({ ...user, password: e.target.value })}
-              className="w-full input input-bordered h-10"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="password"
               placeholder="Password"
+              required
             />
           </div>
 
-
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Age</span>
-            </label>
+          {/* Age */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2">Age</label>
             <input
               value={user.age}
               onChange={(e) => setUser({ ...user, age: e.target.value })}
-              className="w-full input input-bordered h-10"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="number"
               placeholder="Age"
+              required
             />
           </div>
 
-          <div className="flex items-center my-4">
-            <div className="flex items-center">
-              <p>Male</p>
+          {/* Gender */}
+          <div className="mb-4 flex items-center space-x-4">
+            <p className="text-gray-700 font-semibold">Gender</p>
+            <label>
               <input
-                type="checkbox"
+                type="radio"
                 checked={user.gender === 'Male'}
-                onChange={() => handleCheckbox('Male')}
-                className="checkbox mx-2"
+                onChange={() => handleRadioChange('Male')}
+                className="mr-2"
               />
-            </div>
-            <div className="flex items-center">
-              <p>Female</p>
+              Male
+            </label>
+            <label>
               <input
-                type="checkbox"
+                type="radio"
                 checked={user.gender === 'Female'}
-                onChange={() => handleCheckbox('Female')}
-                className="checkbox mx-2"
+                onChange={() => handleRadioChange('Female')}
+                className="mr-2"
               />
-            </div>
+              Female
+            </label>
           </div>
 
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Address</span>
-            </label>
+          {/* Address */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2">Address</label>
             <input
               value={user.address}
               onChange={(e) => setUser({ ...user, address: e.target.value })}
-              className="w-full input input-bordered h-10"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
               placeholder="Address"
+              required
             />
           </div>
 
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">City</span>
-            </label>
+          {/* City */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2">City</label>
             <input
               value={user.city}
               onChange={(e) => setUser({ ...user, city: e.target.value })}
-              className="w-full input input-bordered h-10"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
               placeholder="City"
+              required
             />
           </div>
 
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Country</span>
-            </label>
+          {/* Country */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-semibold mb-2">Country</label>
             <input
               value={user.country}
               onChange={(e) => setUser({ ...user, country: e.target.value })}
-              className="w-full input input-bordered h-10"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
               placeholder="Country"
+              required
             />
           </div>
 
-          <p className="text-center my-2">
-            Already have an account? <Link to="/login"> login </Link>
+          {/* Login Link */}
+          <p className="text-center text-sm text-gray-600 mb-4">
+            Already have an account? <Link to="/login" className="text-blue-500 hover:underline">Login</Link>
           </p>
 
+          {/* Submit Button */}
           <div>
-            <button type="submit" className="btn btn-block btn-sm mt-2 border border-slate-700">
+            <button
+              type="submit"
+              className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none"
+            >
               Signup
             </button>
           </div>
         </form>
       </div>
     </div>
-    </div>
-    
   );
 };
 
