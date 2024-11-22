@@ -57,7 +57,7 @@ const getNextInstallmentDate = (startDate, installmentDuration) => {
   return nextInstallmentDate;
 };
 
-// Cron job runs every day at midnight (to check if any installment is due)
+// Cron job runs every day at 1 (to check if any installment is due)
 cron.schedule("7 13 * * *", async () => {
   console.log("Running cron job to check installment dates...");
 
