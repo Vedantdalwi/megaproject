@@ -93,7 +93,7 @@ const AddPolicy = () => {
             placeholder="Enter policy number"
           />
         </div>
-
+abshdjd
         {/* Policy Name */}
         <div>
           <label className="block text-gray-700">Policy Name:</label>
