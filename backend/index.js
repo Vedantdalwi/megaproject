@@ -18,10 +18,7 @@ const PORT = process.env.PORT || 8000;
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-const corsOption = {
-  credentials: true,
-};
-app.use(cors(corsOption));
+app.use(cors());
 
 // Routes
 app.use("/api/v1/user", userRoute);
