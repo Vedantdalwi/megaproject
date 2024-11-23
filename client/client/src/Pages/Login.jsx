@@ -15,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     try {
       axios.defaults.withCredentials = true; 
-      const res = await axios.post('http://localhost:8080/api/v1/user/login', user, {
+      const res = await axios.post('https://megaproject-6bjc.onrender.com/api/v1/user/login', user, {
         headers: {
           'Content-Type': 'application/json',
         },
