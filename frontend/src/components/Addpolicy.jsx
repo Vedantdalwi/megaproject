@@ -47,7 +47,7 @@ const AddPolicy = () => {
       console.log('Form data being submitted:', updatedFormData);
     try {
       // Make the POST request to the backend API
-      const response = await axios.post('http://localhost:8080/api/v1/policy/addpolicy', formData, {headers: {
+      const response = await axios.post('https://megaproject-6bjc.onrender.com/api/v1/policy/addpolicy', formData, {headers: {
         "Content-Type": "application/json"
     },
     withCredentials: true
