@@ -17,7 +17,7 @@ const PolicyTable = () => {
 
   const handleDeletePolicy = async (policyId) => {
     try {
-      const response = await axios.delete(`http://localhost:8080/api/v1/policy/deletePolicy/${policyId}`, {
+      const response = await axios.delete(`https://megaproject-6bjc.onrender.com/api/v1/policy/deletePolicy/${policyId}`, {
         withCredentials: true,
       }); // Call DELETE endpoint
 
@@ -34,7 +34,7 @@ const PolicyTable = () => {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/policy/policies', {
+        const response = await axios.get('https://megaproject-6bjc.onrender.com/api/v1/policy/policies', {
           withCredentials: true,
         }); // Adjust API endpoint as necessary
         setPolicies(response.data.policies); // Assuming the response is in the format { policies: [...] }
