@@ -33,7 +33,7 @@ const SettingsPage = () => {
     setError(null);
 
     try {
-      const response = await axios.put('http://localhost:8080/api/v1/user/profile/edit', formData, {
+      const response = await axios.put('https://megaproject-6bjc.onrender.com/api/v1/user/profile/edit', formData, {
         withCredentials: true, // If using authentication cookies or JWT in headers
       });
 
