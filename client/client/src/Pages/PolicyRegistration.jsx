@@ -53,7 +53,7 @@ export default function PolicyRegistration() {
     
     try {
       // Make the POST request to the backend API
-      const response = await axios.post('http://localhost:8080/api/v1/policy/addpolicy', updatedFormData, {
+      const response = await axios.post('https://megaproject-6bjc.onrender.com/api/v1/policy/addpolicy', updatedFormData, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
