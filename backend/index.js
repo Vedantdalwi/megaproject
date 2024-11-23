@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 8000;
 // Define CORS options
 const corsOptions = {
   origin: 'https://megaproject-fquc.vercel.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow credentials (cookies/authorization headers)
 };
 
