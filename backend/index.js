@@ -15,10 +15,17 @@ dotenv.config({});
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+// Define CORS options
+const corsOptions = {
+  origin: 'https://megaproject-fquc.vercel.app',
+  credentials: true, // Allow credentials (cookies/authorization headers)
+};
+
+app.use(cors(corsOptions));
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
 
 // Routes
 app.use("/api/v1/user", userRoute);
