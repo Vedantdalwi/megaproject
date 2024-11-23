@@ -3,7 +3,6 @@ import { User } from "../models/user.model.js"; // User model
 
 export const addNewPolicy = async (req, res) => {
   try {
-    // Destructure required fields from the request body
     const {
       policyNumber,
       policyName,
@@ -13,13 +12,9 @@ export const addNewPolicy = async (req, res) => {
       endDate,
       installmentDuration,
       installmentAmount,
-      nominees, // Add nominees to destructuring
+      nominees,
     } = req.body;
 
-    // Get user ID from the request, assuming it's attached from middleware (e.g., after authentication)
-    const userId = req.id;
-
-    // Basic validation to check if all required fields are provided
     if (
       !policyNumber ||
       !policyName ||
@@ -36,7 +31,6 @@ export const addNewPolicy = async (req, res) => {
       });
     }
 
-    // Validate policyType (optional, can be skipped if enum does it for you)
     const validPolicyTypes = ["health", "life", "auto", "home"];
     if (!validPolicyTypes.includes(policyType)) {
       return res.status(400).json({
@@ -46,7 +40,6 @@ export const addNewPolicy = async (req, res) => {
       });
     }
 
-    // Validate installmentDuration
     const validInstallmentDurations = ["monthly", "3 months", "annually"];
     if (!validInstallmentDurations.includes(installmentDuration)) {
       return res.status(400).json({
@@ -56,7 +49,6 @@ export const addNewPolicy = async (req, res) => {
       });
     }
 
-    // Check if startDate is before endDate
     const start = new Date(startDate);
     const end = new Date(endDate);
     if (start >= end) {
@@ -66,7 +58,6 @@ export const addNewPolicy = async (req, res) => {
       });
     }
 
-    // Check if the policy number is unique
     const existingPolicy = await Policy.findOne({ policyNumber });
     if (existingPolicy) {
       return res.status(400).json({
@@ -75,7 +66,6 @@ export const addNewPolicy = async (req, res) => {
       });
     }
 
-    // Validate nominees (optional)
     if (nominees && !Array.isArray(nominees)) {
       return res.status(400).json({
         message: "Nominees must be an array of names",
@@ -83,7 +73,6 @@ export const addNewPolicy = async (req, res) => {
       });
     }
 
-    // Create the new policy
     const policy = await Policy.create({
       policyNumber,
       policyName,
@@ -93,19 +82,9 @@ export const addNewPolicy = async (req, res) => {
       endDate,
       installmentDuration,
       installmentAmount,
-      user: userId,
-      nominees: nominees || [], // Set nominees to an empty array if not provided
+      user: null, // Set to null since no user is linked
+      nominees: nominees || [],
     });
-
-    // Find the user and attach the policy reference to their profile
-    const user = await User.findById(userId);
-    if (user) {
-      user.policies.push(policy._id);
-      await user.save();
-    }
-
-    // Populate the user field without returning sensitive info like password
-    await policy.populate({ path: "user", select: "-password" });
 
     return res.status(201).json({
       message: "New policy added successfully",
@@ -117,7 +96,7 @@ export const addNewPolicy = async (req, res) => {
     return res.status(500).json({
       message: "Server error",
       success: false,
-      error: error.message, // Send more error information
+      error: error.message,
     });
   }
 };
@@ -125,12 +104,8 @@ export const addNewPolicy = async (req, res) => {
 
 export const getUserPolicy = async (req, res) => {
   try {
-    const userId = req.id; 
-    const policies = await Policy.find({ user: userId })
-      .sort({ createdAt: -1 }) // Sort policies by creation date (most recent first)
-      .populate({
-        path: "user",
-      });
+    const policies = await Policy.find({})
+      .sort({ createdAt: -1 });
 
     return res.status(200).json({
       policies,
@@ -147,10 +122,8 @@ export const getUserPolicy = async (req, res) => {
 
 export const deletePolicy = async (req, res) => {
   try {
-    const policyId = req.params.id; // Get policy ID from URL parameters
-    const userId = req.id; // Get the authenticated user's ID (assuming it's set in req.id)
+    const policyId = req.params.id;
 
-    // Find the policy by ID
     const policy = await Policy.findById(policyId);
     if (!policy) {
       return res
@@ -158,18 +131,7 @@ export const deletePolicy = async (req, res) => {
         .json({ message: "Policy not found", success: false });
     }
 
-    // Check if the logged-in user is the owner of the policy
-    if (policy.user.toString() !== userId) {
-      return res.status(403).json({ message: "Unauthorized", success: false });
-    }
-
-    // Delete the policy
     await Policy.findByIdAndDelete(policyId);
-
-    // Remove the policy ID from the user's policies array
-    let user = await User.findById(userId);
-    user.policies = user.policies.filter((id) => id.toString() !== policyId);
-    await user.save();
 
     return res.status(200).json({
       success: true,
